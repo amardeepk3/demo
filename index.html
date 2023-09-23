@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <!-- CSS dependencies -->
+    <link rel="stylesheet" type="text/css"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /> -->
+
+    <!-- Javascript dependencies -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.3.2/tinymce.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.3.2/jquery.tinymce.min.js"></script>
+
+    <!-- Grid editor CSS -->
+    <link rel="stylesheet" type="text/css" href="../dist/grideditor.css" />
+    <!-- Grid editor javascript -->
+    <script src="../dist/jquery.grideditor.js"></script>
+
+    <script>
+        $(function () {
+            // Initialize grid editor
+            $('#myGrid').gridEditor({
+                new_row_layouts: [[12], [6, 6], [9, 3]],
+                content_types: ['tinymce'],
+            });
+
+            // // Get resulting html
+            // var html = $('#myGrid').gridEditor('getHtml');
+            // console.log(html);
+
+            //triggered when modal is shown
+            $('#exampleModal').on('shown.bs.modal', function (event) {
+
+                // The reference tag is your anchor tag here
+                var reference_tag = $(event.relatedTarget);
+                var id = reference_tag.data('rowid')
+                // alert(id);
+
+                var modal = $(this)
+                console.log("modal", modal)
+                const btn = modal.find('.button_text')[0];
+                // ...
+                // ...
+
+                //                 var inputElement = document.createElement('input');
+                // inputElement.type = "button"
+                // var isclick= false;
+                const previd = btn.classList.item(3);
+                btn.classList.remove(previd);
+                btn.classList.add(id);
+
+                // $("#"+id).removeEventListener('click', function () {
+                //     addTextForm(id,btn);
+                // });
+                // if(!isclick){
+                const selectedBtn = document.getElementsByClassName("button_text " + id)[0];
+                selectedBtn.disabled = false;
+                // btn.removeEventListener('click', addTextForm.bind(id, btn), false);
+                // btn.removeEventListener('click', addTextForm.bind(id, btn), true);
+
+
+                btn.addEventListener('click', addTextForm.bind(id, btn));
+                // btn.removeEventListener('click', addTextForm);
+
+
+                // }
+                console.log(btn.hasAttribute('onclick'));
+                console.log("btn======>>>>>>", btn)
+
+                // btn.removeEventListener('click', function () {
+                //     addTextForm(id,btn);
+                // });
+                // btn.removeEventListener('click',addTextForm(id,btn))
+
+                // btn.addEventListener('click',addTextForm(id,btn))
+
+
+                // ​document.body.appendChild(inputElement);​
+            });
+
+            $('#exampleModal').on('hidden.bs.modal', function (event) {
+                // do something...
+                var modal = $(this)
+                const btn = modal.find('.button_text')[0];
+                let clonebtn = btn.cloneNode(true);
+                console.log("clonebtn", clonebtn)
+                btn.remove();
+                modal.find('.modal-body')[0].append(clonebtn)
+                // btn.removeEventListener('click', addTextForm);
+
+            })
+            function addTextForm(id, btn) {
+                const btnd = btn.srcElement;
+                // btnd.removeEventListener('click', addTextForm);
+
+                // $("."+id).append("<input type='text'/>")
+                // document.getElementById(id).parentNode.parentNode.lastElementChild.innerHTML= "<input type='text'/>";
+                const rowid = id.classList.item(3)
+                    document.getElementById(rowid).parentNode.parentNode.lastElementChild.insertAdjacentHTML("afterend", createFormEle())
+                    // btnd.removeEventListener('click', addTextForm);
+
+            }
+
+            function createFormEle(){
+                return '<div class="form-group"><label for="exampleInputEmail1" class="form-label mt-4">Email address</label><input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"><small id="emailHelp" class="form-text text-muted">Well never share your email with anyone else.</small></div>';
+
+            }
+
+        });
+
+
+
+
+
+    </script>
+
+
+
+    <title>Grid Editor example</title>
+</head>
+
+<body>
+    <div id="fb-editor"></div>
+    <div class="container">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-rowid="12" data-toggle="modal" data-target="#exampleModal">
+            Launch demo modal
+        </button>
+
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <button type="button" id="button_text" class="btn btn-secondary button_text">add text
+                            form</button>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="myGrid">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Lorem ipsum dolor sit amet, consectetur</h1>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit exercitationem eaque aperiam rem
+                        quia quibusdam dolor ducimus quo similique eos pariatur nostrum aliquam nam eius, doloremque
+                        quis voluptatum unde. Porro voluptates aspernatur voluptate ipsam, magni vero. Accusamus, iusto
+                        tempore id!</p>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quae laboriosam, excepturi quas.</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <h2>Lorem ipsum dolor</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea facilis vel aliquam aspernatur dolor
+                        placeat totam saepe perferendis. Odio quia vel sed eveniet cupiditate, illum doloremque sint
+                        veniam eum? Corporis?</p>
+                </div>
+                <div class="col-lg-4">
+                    <h2>Pariatur reprehenderit</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illo adipisci ipsa, consequuntur cum,
+                        sunt dolores veniam. Enim inventore in dolore deserunt vitae sequi nemo!</p>
+                </div>
+                <div class="col-lg-4">
+                    <h2>Pariatur reprehenderit</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea excepturi ducimus numquam aut error
+                        corporis aspernatur ipsum quos eius culpa!</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <h2>Lorem ipsum dolor.</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro distinctio atque molestiae optio,
+                        consequuntur? Iusto ratione cumque dolor aut dolore!</p>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <hr>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis facilis molestias
+                                voluptatum laudantium fuga ratione tempora rem dolor dicta rerum vero ut, suscipit ex
+                                qui amet quam vel cupiditate quaerat minus assumenda reiciendis, similique omnis
+                                delectus! Autem, repudiandae cumque eaque?</p>
+                        </div>
+                        <div class="col-lg-6">
+                            <hr>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eveniet molestiae quaerat
+                                illum, consequuntur iusto aspernatur quam provident? Possimus!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <h2>Lusto ratione</h2>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quis fugit quasi officiis id laudantium
+                        error aut ut aperiam dicta saepe non vel, cupiditate illum ipsam velit deleniti natus incidunt
+                        impedit molestias dolore quos dolores enim. Aliquid ipsam eaque consequuntur quaerat, suscipit a
+                        in. Praesentium repudiandae quibusdam recusandae sequi eligendi quos, dignissimos, officiis
+                        officia minima necessitatibus eaque consequatur in id adipisci qui minus voluptatum quae
+                        debitis, quas maxime iure. Tempore vero unde quia reiciendis ad beatae voluptate omnis, ipsa
+                        expedita ab, quasi, neque. Doloribus, pariatur. Aut hic voluptate.</p>
+                </div>
+            </div>
+
+        </div> <!-- /#myGrid -->
+    </div> <!-- /.container -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  <script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
+  <script>
+  jQuery(function($) {
+    $(document.getElementById('fb-editor')).formBuilder();
+  });
+  </script> -->
+</body>
+
+</html>
